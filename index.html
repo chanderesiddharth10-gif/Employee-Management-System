@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Management System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    <header>
+
+        <h1>Employee Management System</h1>
+
+        <p>Manage your employees easily</p>
+
+    </header>
+
+
+    <!-- Main Container -->
+
+    <div class="container">
+
+
+        <!-- Dashboard -->
+
+        <section class="dashboard">
+
+            <div class="card">
+
+                <h2>Total Employees</h2>
+
+                <p id="totalEmployees">3</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>Departments</h2>
+
+                <p id="totalDepartments">3</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Employee Management -->
+
+        <section class="employee-section">
+
+
+            <!-- Section Header -->
+
+            <div class="section-header">
+
+                <h2>Employee Management</h2>
+
+                <button id="addEmployeeBtn">
+                    Add Employee
+                </button>
+
+            </div>
+
+
+            <!-- Add Employee Form -->
+
+            <div id="employeeForm" class="employee-form">
+
+                <h2>Add New Employee</h2>
+
+                <form id="addEmployeeForm">
+
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter employee name"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter employee email"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="department">
+                            Department
+                        </label>
+
+                        <input
+                            type="text"
+                            id="department"
+                            placeholder="Enter department"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="salary">
+                            Salary
+                        </label>
+
+                        <input
+                            type="number"
+                            id="salary"
+                            placeholder="Enter salary"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter phone number"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-buttons">
+
+                        <button type="submit">
+                            Add Employee
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelBtn">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Edit Employee Form -->
+
+            <div id="editEmployeeForm" class="employee-form">
+
+                <h2>Edit Employee</h2>
+
+                <form id="updateEmployeeForm">
+
+
+                    <div class="form-group">
+
+                        <label for="editId">
+                            Employee ID
+                        </label>
+
+                        <input
+                            type="number"
+                            id="editId"
+                            readonly>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editName">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editName"
+                            placeholder="Enter employee name"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="editEmail"
+                            placeholder="Enter employee email"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editDepartment">
+                            Department
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editDepartment"
+                            placeholder="Enter department"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editSalary">
+                            Salary
+                        </label>
+
+                        <input
+                            type="number"
+                            id="editSalary"
+                            placeholder="Enter salary"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editPhone">
+                            Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="editPhone"
+                            placeholder="Enter phone number"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-buttons">
+
+                        <button type="submit">
+                            Update Employee
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelEditBtn">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Employee Table -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Department</th>
+
+                            <th>Salary</th>
+
+                            <th>Phone</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="employeeTableBody">
+
+                        <tr>
+
+                            <td>1</td>
+
+                            <td>Rahul Sharma</td>
+
+                            <td>
+                                rahul@gmail.com
+                            </td>
+
+                            <td>IT</td>
+
+                            <td>₹35,000</td>
+
+                            <td>9876543210</td>
+
+                            <td>
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="editEmployee(1)">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteEmployee(1)">
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>2</td>
+
+                            <td>Priya Sharma</td>
+
+                            <td>
+                                priya.sharma@gmail.com
+                            </td>
+
+                            <td>IT</td>
+
+                            <td>₹45,000</td>
+
+                            <td>9999999999</td>
+
+                            <td>
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="editEmployee(2)">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteEmployee(2)">
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>3</td>
+
+                            <td>Amit Joshi</td>
+
+                            <td>
+                                amit@gmail.com
+                            </td>
+
+                            <td>Finance</td>
+
+                            <td>₹40,000</td>
+
+                            <td>9876543212</td>
+
+                            <td>
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="editEmployee(3)">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteEmployee(3)">
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- JavaScript -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
