@@ -1,16 +1,169 @@
-package com.employee.dao;
+package com.employee.employee_management_api.dao;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.employee.model.Employee;
-import com.employee.util.DBConnection;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
+import com.employee.employee_management_api.model.Employee;
+
+@Repository
 public class EmployeeDAO {
 
-	
-	//FOR ADDING EMP DETAILS  
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+
+    // Get All Employees
+    public List<Employee> getAllEmployees() {
+
+        List<Employee> employees = new ArrayList<>();
+
+        String sql = "SELECT * FROM employees";
+
+        try {
+
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql);
+
+            ResultSet resultSet =
+                    preparedStatement.executeQuery();
+
+
+            while (resultSet.next()) {
+
+                Employee employee = new Employee();
+
+                employee.setEmployee(
+                	    resultSet.getInt("employee_id")
+                	);
+
+                employee.setName(
+                        resultSet.getString("name")
+                );
+
+                employee.setEmail(
+                        resultSet.getString("email")
+                );
+
+                employee.setDepartment(
+                        resultSet.getString("department")
+                );
+
+                employee.setSalary(
+                        resultSet.getDouble("salary")
+                );
+
+                employee.setPhone(
+                        resultSet.getString("phone")
+                );
+
+                employees.add(employee);
+            }
+
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return employees;
+    }
+
+
+    public Employee getEmployeeById(int employeeId) {
+
+        String sql = "SELECT * FROM employees WHERE employee_id = ?";
+
+        try {
+
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, employeeId);
+
+            ResultSet resultSet =
+                    preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+
+                Employee employee = new Employee();
+
+                employee.setEmployee(
+                        resultSet.getInt("employee_id")
+                );
+
+                employee.setName(
+                        resultSet.getString("name")
+                );
+
+                employee.setEmail(
+                        resultSet.getString("email")
+                );
+
+                employee.setDepartment(
+                        resultSet.getString("department")
+                );
+
+                employee.setSalary(
+                        resultSet.getDouble("salary")
+                );
+
+                employee.setPhone(
+                        resultSet.getString("phone")
+                );
+
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+
+                return employee;
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return null;
+    }
+    
+    
+ // Add Employee
     public void addEmployee(Employee employee) {
 
         String sql = "INSERT INTO employees " +
@@ -18,7 +171,13 @@ public class EmployeeDAO {
                      "VALUES (?, ?, ?, ?, ?)";
 
         try {
-            Connection connection = DBConnection.getConnection();
+
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
 
             PreparedStatement preparedStatement =
                     connection.prepareStatement(sql);
@@ -29,193 +188,92 @@ public class EmployeeDAO {
             preparedStatement.setDouble(4, employee.getSalary());
             preparedStatement.setString(5, employee.getPhone());
 
-            int rows = preparedStatement.executeUpdate();
-
-            if (rows > 0) {
-                System.out.println("Employee Added Successfully!");
-            }
+            preparedStatement.executeUpdate();
 
             preparedStatement.close();
             connection.close();
 
+            System.out.println("Employee Added Successfully!");
+
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
-    
-    
-        
-        //FOR FETCHING/VIEW ALL EMP DETAILS
-        public void getAllEmployees() {
 
-            String sql = "SELECT * FROM employees";
 
-            try {
+    public void updateEmployee(Employee employee) {
 
-                Connection connection = DBConnection.getConnection();
+        String sql = "UPDATE employees SET " +
+                     "name = ?, " +
+                     "email = ?, " +
+                     "department = ?, " +
+                     "salary = ?, " +
+                     "phone = ? " +
+                     "WHERE employee_id = ?";
 
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(sql);
+        try {
 
-                ResultSet resultSet = preparedStatement.executeQuery();
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
 
-                while (resultSet.next()) {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql);
 
-                    System.out.println("Employee ID: "
-                            + resultSet.getInt("employee_id"));
+            preparedStatement.setString(1, employee.getName());
+            preparedStatement.setString(2, employee.getEmail());
+            preparedStatement.setString(3, employee.getDepartment());
+            preparedStatement.setDouble(4, employee.getSalary());
+            preparedStatement.setString(5, employee.getPhone());
+            preparedStatement.setInt(6, employee.getEmployee());
 
-                    System.out.println("Name: "
-                            + resultSet.getString("name"));
+            preparedStatement.executeUpdate();
 
-                    System.out.println("Email: "
-                            + resultSet.getString("email"));
+            preparedStatement.close();
+            connection.close();
 
-                    System.out.println("Department: "
-                            + resultSet.getString("department"));
+            System.out.println("Employee Updated Successfully!");
 
-                    System.out.println("Salary: "
-                            + resultSet.getDouble("salary"));
+        } catch (Exception e) {
 
-                    System.out.println("Phone: "
-                            + resultSet.getString("phone"));
+            e.printStackTrace();
 
-                    System.out.println("-------------------------");
-                }
-
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        
+        }
     }
-        
-        
-        
-        
-       //FOR FETCHING /VIEW SPECIFIC SELECTED EMP DETAILS BY THEIR ID 
-        public void getEmployeeById(int employeeId) {
+    
+    public void deleteEmployee(int employeeId) {
 
-            String sql = "SELECT * FROM employees WHERE employee_id = ?";
+        String sql = "DELETE FROM employees WHERE employee_id = ?";
 
-            try {
+        try {
 
-                Connection connection = DBConnection.getConnection();
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
 
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(sql);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql);
 
-                preparedStatement.setInt(1, employeeId);
+            preparedStatement.setInt(1, employeeId);
 
-                ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-                if (resultSet.next()) {
+            preparedStatement.close();
+            connection.close();
 
-                    System.out.println("Employee ID: "
-                            + resultSet.getInt("employee_id"));
+            System.out.println("Employee Deleted Successfully!");
 
-                    System.out.println("Name: "
-                            + resultSet.getString("name"));
+        } catch (Exception e) {
 
-                    System.out.println("Email: "
-                            + resultSet.getString("email"));
+            e.printStackTrace();
 
-                    System.out.println("Department: "
-                            + resultSet.getString("department"));
-
-                    System.out.println("Salary: "
-                            + resultSet.getDouble("salary"));
-
-                    System.out.println("Phone: "
-                            + resultSet.getString("phone"));
-
-                } else {
-
-                    System.out.println("Employee not found!");
-
-                }
-
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        
-        
-        
-        
-        
-        //TO UPDATING EMP DETAILS SUCH AS NAME,EMAIL,SALARY,PHONE,DEPARTMENT
-        public void updateEmployee(Employee employee) {
-
-            String sql = "UPDATE employees SET " +
-                         "name = ?, email = ?, department = ?, salary = ?, phone = ? " +
-                         "WHERE employee_id = ?";
-
-            try {
-
-                Connection connection = DBConnection.getConnection();
-
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(sql);
-
-                preparedStatement.setString(1, employee.getName());
-                preparedStatement.setString(2, employee.getEmail());
-                preparedStatement.setString(3, employee.getDepartment());
-                preparedStatement.setDouble(4, employee.getSalary());
-                preparedStatement.setString(5, employee.getPhone());
-                preparedStatement.setInt(6, employee.getEmployee());
-
-                int rows = preparedStatement.executeUpdate();
-
-                if (rows > 0) {
-                    System.out.println("Employee Updated Successfully!");
-                } else {
-                    System.out.println("Employee not found!");
-                }
-
-                preparedStatement.close();
-                connection.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        
-        
-        //TO DELETE EMPLOYEE RECORDS
-        public void deleteEmployee(int employeeId) {
-
-            String sql = "DELETE FROM employees WHERE employee_id = ?";
-
-            try {
-
-                Connection connection = DBConnection.getConnection();
-
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(sql);
-
-                preparedStatement.setInt(1, employeeId);
-
-                int rows = preparedStatement.executeUpdate();
-
-                if (rows > 0) {
-                    System.out.println("Employee Deleted Successfully!");
-                } else {
-                    System.out.println("Employee not found!");
-                }
-
-                preparedStatement.close();
-                connection.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-}     
+    }
+}
